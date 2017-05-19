@@ -2,7 +2,7 @@ angular.module('zeppelinWebApp').controller('LinkParameterCtrl', LinkParameterCt
 
 
 
-function LinkParameterCtrl ($scope) {
+function LinkParameterCtrl ($scope, $rootScope) {
   'ngInject'
 
   $scope.data = {
@@ -16,7 +16,8 @@ function LinkParameterCtrl ($scope) {
       column : '',
       inputName : ''
     }],
-    addedLinks: []
+    addedLinks: [],
+    source: null
   };
 
   $scope.addRow = function(index){
@@ -30,7 +31,7 @@ function LinkParameterCtrl ($scope) {
     }
   };
 
-  $scope.addLink = function() {
+  $scope.addLink = function(paragraphId) {
     var rows = $scope.data.linkParameterRows;
 
     var linkParameters = [];
@@ -46,9 +47,18 @@ function LinkParameterCtrl ($scope) {
       linkParameters:linkParameters
     }
     $scope.data.addedLinks.push(addingLink);
+
+    $rootScope.$broadcast('linkParameter', {
+      sourceParagraphId: paragraphId,
+      targetParagraph: $scope.data.paragraph,
+      sourceParagraphLinkColumnIdx: 0,
+      targetParagraphLinkParameters: linkParameters
+    });
   };
 
   $scope.deleteLink = function(index) {
     $scope.data.addedLinks.splice(index, 1);
   };
+
+
 }

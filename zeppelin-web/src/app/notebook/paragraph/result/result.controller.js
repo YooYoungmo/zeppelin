@@ -216,6 +216,13 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
     }
   })
 
+  $scope.$on('linkParameter', function (event, data) {
+    if (paragraph.id === data.sourceParagraphId) {
+      tableData.linkParameter = data;
+      renderResult($scope.type, true);
+    }
+  })
+
   const updateData = function (result, config, paragraphRef, index) {
     data = result.data
     paragraph = paragraphRef
@@ -527,6 +534,7 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
           }
           builtInViz.instance._emitter = emitter
           builtInViz.instance._compile = $compile
+          builtInViz.instance._scope = $scope
           builtInViz.instance._createNewScope = createNewScope
           const transformation = builtInViz.instance.getTransformation()
           transformation._emitter = emitter
@@ -589,7 +597,12 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
   }
 
   const createNewScope = function () {
-    return $rootScope.$new(true)
+    var newScope = $rootScope.$new(true)
+    newScope.runParagraphFromLink = function () {
+      window.console.log('runParagraphFromLink')
+    }
+
+    return newScope
   }
 
   const commitParagraphResult = function (title, text, config, params) {

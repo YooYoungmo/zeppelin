@@ -41,13 +41,16 @@ export default class TableVisualization extends Visualization {
       return {type: 'text'}
     })
 
+    let linkParameter = tableData.linkParameter
+
     if (this.hot) {
       this.hot.destroy()
     }
 
     let handsonHelper = new HandsonHelper()
+
     this.hot = new Handsontable(container, handsonHelper.getHandsonTableConfig(
-      columns, columnNames, resultRows))
+      columns, columnNames, resultRows, linkParameter, this._compile, this._scope))
     this.hot.validateCells(null)
   }
 

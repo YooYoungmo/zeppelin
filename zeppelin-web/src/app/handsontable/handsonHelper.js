@@ -23,8 +23,39 @@ export default class HandsonHelper {
     this._numericValidator = this._numericValidator.bind(this)
   }
 
-  getHandsonTableConfig (columns, columnNames, resultRows) {
+  _findIdxByColumnName(columnName, columnNames) {
+    return columnNames.indexOf(columnName)
+  }
+
+  _makeParams(targetParagraphLinkParameters, columnNames, resultRow) {
+    var params = {}
+
+    for(var i = 0; i < targetParagraphLinkParameters.length; i++) {
+      var linkParameter = targetParagraphLinkParameters[i]
+
+      // Key로 데이터 Get
+      var data = resultRow[this._findIdxByColumnName(Object.keys(linkParameter)[0], columnNames)]
+
+      // Value로 key값으로 매핑 후 데이터 Set
+      params[Object.values(linkParameter)[0]] = data;
+    }
+    return JSON.stringify(params)
+  }
+
+  getHandsonTableConfig (columns, columnNames, resultRows, linkParameter, compile, scope) {
     let self = this
+    if(linkParameter) {
+      columns[linkParameter.sourceParagraphLinkColumnIdx].isHtml = true
+      for(var i = 0; i < resultRows.length; i++) {
+        var resultRow = resultRows[i]
+        var params = self._makeParams(linkParameter.targetParagraphLinkParameters, columnNames, resultRow)
+
+        resultRow[linkParameter.sourceParagraphLinkColumnIdx] =
+          '<a link-params data-paragraph-id="' + linkParameter.targetParagraph + '" data-params=' + "'" + params + "'" + '>' +
+                    resultRow[linkParameter.sourceParagraphLinkColumnIdx] + '</a>'
+      }
+    }
+
     return {
       colHeaders: columnNames,
       data: resultRows,
@@ -44,8 +75,9 @@ export default class HandsonHelper {
       cells: function (ro, co, pro) {
         let cellProperties = {}
         let colType = columns[co].type
+        let htmlFlag = columns[co].isHtml
         cellProperties.renderer = function (instance, td, row, col, prop, value, cellProperties) {
-          self._cellRenderer(instance, td, row, col, prop, value, cellProperties, colType)
+          self._cellRenderer(instance, td, row, col, prop, value, cellProperties, colType, htmlFlag, compile, scope)
         }
         return cellProperties
       },
@@ -71,8 +103,8 @@ export default class HandsonHelper {
   }
 
   /*
-  ** Private Service Functions
-  */
+   ** Private Service Functions
+   */
 
   _addButtonMenuEvent (button, menu) {
     Handsontable.Dom.addEvent(button, 'click', function (event) {
@@ -152,7 +184,7 @@ export default class HandsonHelper {
     return false
   }
 
-  _cellRenderer (instance, td, row, col, prop, value, cellProperties, colType) {
+  _cellRenderer (instance, td, row, col, prop, value, cellProperties, colType, htmlFlag, compile, scope) {
     if (colType === 'numeric' && this._isNumeric(value)) {
       cellProperties.format = '0,0.[00000]'
       td.style.textAlign = 'left'
@@ -160,6 +192,9 @@ export default class HandsonHelper {
       Handsontable.renderers.NumericRenderer.apply(this, arguments)
     } else if (value.length > '%html'.length && value.substring(0, '%html '.length) === '%html ') {
       td.innerHTML = value.substring('%html'.length)
+    } else if (htmlFlag == true) {
+      td.innerHTML = value;
+      compile(td)(scope)
     } else {
       // eslint-disable-next-line prefer-rest-params
       Handsontable.renderers.TextRenderer.apply(this, arguments)

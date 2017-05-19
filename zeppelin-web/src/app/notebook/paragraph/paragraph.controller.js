@@ -171,6 +171,16 @@ function ParagraphCtrl ($scope, $rootScope, $route, $window, $routeParams, $loca
     }
   }
 
+  $scope.$on('runParagraphForLinkParameter', function (event, data) {
+    window.console.log('runParagraphForLinkParameter')
+
+    if ($scope.paragraph.id === data.paragraphId) {
+      window.console.log(data)
+      $scope.paragraph.settings.params = data.params
+      $scope.runParagraph($scope.getEditorValue(), false, false)
+    }
+  })
+
   $scope.$on('updateParagraphOutput', function (event, data) {
     if ($scope.paragraph.id === data.paragraphId) {
       if (!$scope.paragraph.results) {
