@@ -600,12 +600,7 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
   }
 
   const createNewScope = function () {
-    var newScope = $rootScope.$new(true)
-    newScope.runParagraphFromLink = function () {
-      window.console.log('runParagraphFromLink')
-    }
-
-    return newScope
+    return $rootScope.$new(true)
   }
 
   const commitParagraphResult = function (title, text, config, params) {
