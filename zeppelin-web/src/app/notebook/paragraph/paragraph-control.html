@@ -154,7 +154,7 @@ limitations under the License.
             <span class="shortcut-keys">Ctrl+{{ isMac ? 'Option' : 'Alt'}}+W</span></a>
         </li>
         <li>
-            <a href="" data-toggle="modal" data-target="#{{ paragraph.id }}_linkParameterModal">
+            <a href="" data-toggle="modal" data-target="#{{ paragraph.id }}_linkParameterModal" ng-click="openLinkParameterModal(paragraph.id)">
               <span class="icon-share-alt shortcut-icon"></span>Link parameters
             </a>
         </li>
@@ -171,6 +171,6 @@ limitations under the License.
     </span>
   </span>
 </div>
-<div ng-controller="LinkParameterCtrl as linkparameterctrl"
+<div ng-controller="LinkParameterCtrl as linkparameterctrl" ng-init="paragraphId = paragraph.id"
      id="{{ paragraph.id }}_link-parameter-modal-container" ng-include src="'components/linkParameter/link-parameter-dialog.html'"></div>
 

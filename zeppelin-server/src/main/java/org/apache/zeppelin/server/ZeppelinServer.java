@@ -17,15 +17,6 @@
 
 package org.apache.zeppelin.server;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.servlet.DispatcherType;
-import javax.ws.rs.core.Application;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
@@ -43,15 +34,7 @@ import org.apache.zeppelin.interpreter.InterpreterSettingManager;
 import org.apache.zeppelin.notebook.Notebook;
 import org.apache.zeppelin.notebook.NotebookAuthorization;
 import org.apache.zeppelin.notebook.repo.NotebookRepoSync;
-import org.apache.zeppelin.rest.ConfigurationsRestApi;
-import org.apache.zeppelin.rest.CredentialRestApi;
-import org.apache.zeppelin.rest.HeliumRestApi;
-import org.apache.zeppelin.rest.InterpreterRestApi;
-import org.apache.zeppelin.rest.LoginRestApi;
-import org.apache.zeppelin.rest.NotebookRepoRestApi;
-import org.apache.zeppelin.rest.NotebookRestApi;
-import org.apache.zeppelin.rest.SecurityRestApi;
-import org.apache.zeppelin.rest.ZeppelinRestApi;
+import org.apache.zeppelin.rest.*;
 import org.apache.zeppelin.scheduler.SchedulerFactory;
 import org.apache.zeppelin.search.LuceneSearch;
 import org.apache.zeppelin.search.SearchService;
@@ -59,12 +42,7 @@ import org.apache.zeppelin.socket.NotebookServer;
 import org.apache.zeppelin.user.Credentials;
 import org.apache.zeppelin.utils.SecurityUtils;
 import org.eclipse.jetty.http.HttpVersion;
-import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.SecureRequestCustomizer;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -75,6 +53,14 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.DispatcherType;
+import javax.ws.rs.core.Application;
+import java.io.File;
+import java.io.IOException;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Main class of Zeppelin.
@@ -339,6 +325,9 @@ public class ZeppelinServer extends Application {
     WebAppContext webApp = new WebAppContext();
     webApp.setContextPath(conf.getServerContextPath());
     File warPath = new File(conf.getString(ConfVars.ZEPPELIN_WAR));
+
+    LOG.info("warPath : " + warPath.getAbsolutePath());
+
     if (warPath.isDirectory()) {
       // Development mode, read from FS
       // webApp.setDescriptor(warPath+"/WEB-INF/web.xml");

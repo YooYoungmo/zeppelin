@@ -29,7 +29,7 @@ angular.module('zeppelinWebApp').controller('ResultCtrl', ResultCtrl)
 
 function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $location,
                     $timeout, $compile, $http, $q, $templateRequest, $sce, websocketMsgSrv,
-                    baseUrlSrv, ngToast, saveAsService, noteVarShareService, heliumService) {
+                    baseUrlSrv, ngToast, saveAsService, noteVarShareService, heliumService, paragraphResultShareService) {
   'ngInject'
 
   /**
@@ -260,6 +260,9 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
       tableData.loadParagraphResult({type: $scope.type, msg: data})
       $scope.tableDataColumns = tableData.columns
       $scope.tableDataComment = tableData.comment
+
+      paragraphResultShareService.put($scope.paragraph.id, tableData.columns)
+
     } else if ($scope.type === 'IMG') {
       $scope.imageData = data
     }

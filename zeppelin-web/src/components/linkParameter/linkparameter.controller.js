@@ -2,16 +2,13 @@ angular.module('zeppelinWebApp').controller('LinkParameterCtrl', LinkParameterCt
 
 
 
-function LinkParameterCtrl ($scope, $rootScope) {
+function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
   'ngInject'
 
   $scope.data = {
     linkColumn: null,
     paragraph: null,
-    availableOptions: [
-      {id: '1', name: 'cust_no'},
-      {id: '2', name: '_col1'}
-    ],
+    availableOptions: [],
     linkParameterRows: [{
       column : '',
       inputName : ''
@@ -19,6 +16,8 @@ function LinkParameterCtrl ($scope, $rootScope) {
     addedLinks: [],
     source: null
   };
+
+
 
   $scope.addRow = function(index){
     var emptyRow = { column : '', inputName : '' };
@@ -60,5 +59,17 @@ function LinkParameterCtrl ($scope, $rootScope) {
     $scope.data.addedLinks.splice(index, 1);
   };
 
-
+  $scope.$on('openLinkParameterModal', function (event, paragraphId) {
+    if($scope.paragraphId == paragraphId) {
+      if(paragraphResultShareService.get(paragraphId)) {
+        $scope.data.availableOptions = [];
+        var paragraphResults = paragraphResultShareService.get(paragraphId);
+        for(var i = 0; i < paragraphResults.length; i++) {
+          $scope.data.availableOptions.push({
+            idx: paragraphResults[i].index, name: paragraphResults[i].name
+          });
+        }
+      }
+    }
+  });
 }

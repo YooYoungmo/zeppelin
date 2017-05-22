@@ -1297,6 +1297,10 @@ function ParagraphCtrl ($scope, $rootScope, $route, $window, $routeParams, $loca
     }
   }
 
+  $scope.openLinkParameterModal = function(paragraphId) {
+    $rootScope.$broadcast('openLinkParameterModal', paragraphId)
+  }
+
   /** $scope.$on */
 
   $scope.$on('runParagraphUsingSpell', function (event, data) {

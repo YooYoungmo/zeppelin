@@ -11,7 +11,7 @@
           <label class="form-control-label">Link Column</label>
 
           <select class="form-control" ng-model="data.linkColumn">
-            <option ng-repeat="option in data.availableOptions" value="{{ option.name }}">
+            <option ng-repeat="option in data.availableOptions" value="{{ option.idx }}">
               {{ option.name }}
             </option>
           </select>
