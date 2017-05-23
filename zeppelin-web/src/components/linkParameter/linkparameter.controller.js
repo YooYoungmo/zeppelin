@@ -49,9 +49,11 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
 
     var linkParameters = [];
     for(var i = 0; i < rows.length; i++) {
-      var linkParameter = {};
-      linkParameter[rows[i].column] = rows[i].inputName;
-      linkParameters.push(linkParameter);
+      if(rows[i].column && rows[i].inputName) {
+        var linkParameter = {};
+        linkParameter[rows[i].column] = rows[i].inputName;
+        linkParameters.push(linkParameter);
+      }
     }
 
     var selectedLinkColumn = JSON.parse($scope.data.selectedLinkColumn);
