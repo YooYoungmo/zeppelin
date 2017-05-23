@@ -16,6 +16,7 @@ import './app/app.js'
 import './app/app.controller.js'
 import './app/home/home.controller.js'
 import './app/handsontable/handsonHelper.js'
+import './app/handsontable/linkParameterHelper.js'
 import './app/notebook/notebook.controller.js'
 
 import './app/tabledata/tabledata.js'

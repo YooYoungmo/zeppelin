@@ -11,6 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import LinkParameterHelper from './linkParameterHelper'
 
 /**
  * HandsonHelper class
@@ -21,59 +22,11 @@ export default class HandsonHelper {
     this.rows = rows || []
     this.comment = comment || ''
     this._numericValidator = this._numericValidator.bind(this)
+    this.linkParameterHelper = new LinkParameterHelper()
   }
 
-  _findIdxByColumnName(columnName, columnNames) {
-    return columnNames.indexOf(columnName)
-  }
-
-  _makeParams(targetParagraphLinkParameters, columnNames, resultRow) {
-    var params = {}
-
-    for(var i = 0; i < targetParagraphLinkParameters.length; i++) {
-      var linkParameter = targetParagraphLinkParameters[i]
-
-      // Key로 데이터 Get
-      var data = resultRow[this._findIdxByColumnName(Object.keys(linkParameter)[0], columnNames)]
-
-      if(data.indexOf('<a link-params') != -1) {
-        var parser = new DOMParser();
-        var htmlDoc = parser.parseFromString(data, "text/html");
-
-        data = htmlDoc.getElementsByTagName('a')[0].getAttribute('data-raw');
-      }
-
-      // Value로 key값으로 매핑 후 데이터 Set
-      params[Object.values(linkParameter)[0]] = data;
-    }
-    return JSON.stringify(params)
-  }
-
-  _getRawData(idx, resultRow) {
-    if(resultRow[idx].indexOf('<a link-params') != -1) {
-      var parser = new DOMParser();
-      var htmlDoc = parser.parseFromString(resultRow[idx], "text/html");
-
-      return htmlDoc.getElementsByTagName('a')[0].getAttribute('data-raw');
-    } else {
-      return resultRow[idx];
-    }
-  }
-
-  getHandsonTableConfig (columns, columnNames, resultRows, linkParameter, compile, scope) {
+  getHandsonTableConfig (columns, columnNames, resultRows, compile, scope) {
     let self = this
-    if(linkParameter) {
-      for(var i = 0; i < resultRows.length; i++) {
-        var resultRow = resultRows[i]
-        var rawData = self._getRawData(linkParameter.sourceParagraphLinkColumnIdx, resultRow)
-
-        var params = self._makeParams(linkParameter.targetParagraphLinkParameters, columnNames, resultRow)
-
-        resultRow[linkParameter.sourceParagraphLinkColumnIdx] =
-          '<a link-params data-raw="' + rawData + '" data-paragraph-id="' + linkParameter.targetParagraph + '" data-params=' + "'" + params + "'" + '>' +
-            rawData + '</a>'
-      }
-    }
 
     return {
       colHeaders: columnNames,
@@ -210,7 +163,7 @@ export default class HandsonHelper {
       Handsontable.renderers.NumericRenderer.apply(this, arguments)
     } else if (value.length > '%html'.length && value.substring(0, '%html '.length) === '%html ') {
       td.innerHTML = value.substring('%html'.length)
-    } else if (value.indexOf('<a link-params') != -1) {
+    } else if (this.linkParameterHelper.isLinkParameterHtmlTag(value)) {
       td.innerHTML = value;
       compile(td)(scope)
     } else {

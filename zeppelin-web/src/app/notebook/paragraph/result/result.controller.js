@@ -218,7 +218,7 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
 
   $scope.$on('addLinkParameterToParagraphResult', function (event, data) {
     if (paragraph.id === data.sourceParagraphId) {
-      tableData.linkParameter = data;
+      tableData.addLinkParameter = data;
       renderResult($scope.type, true);
     }
   })

@@ -15,6 +15,7 @@
 import Visualization from '../visualization'
 import PassthroughTransformation from '../../tabledata/passthrough'
 import HandsonHelper from '../../handsontable/handsonHelper'
+import LinkParameterHelper from '../../handsontable/linkParameterHelper'
 
 /**
  * Visualize data in table format
@@ -41,16 +42,19 @@ export default class TableVisualization extends Visualization {
       return {type: 'text'}
     })
 
-    let linkParameter = tableData.linkParameter
-
     if (this.hot) {
       this.hot.destroy()
+    }
+
+    if(tableData.addLinkParameter) {
+      let linkParameterHelper = new LinkParameterHelper(columnNames, resultRows)
+      resultRows = linkParameterHelper.generateLinkParameter(tableData.addLinkParameter)
     }
 
     let handsonHelper = new HandsonHelper()
 
     this.hot = new Handsontable(container, handsonHelper.getHandsonTableConfig(
-      columns, columnNames, resultRows, linkParameter, this._compile, this._scope))
+      columns, columnNames, resultRows, this._compile, this._scope))
     this.hot.validateCells(null)
   }
 
