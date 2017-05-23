@@ -10,9 +10,9 @@
         <div class="form-group">
           <label class="form-control-label">Link Column</label>
 
-          <select class="form-control" ng-model="data.linkColumn">
-            <option ng-repeat="option in data.availableOptions" value="{{ option }}">
-              {{ option.name }}
+          <select class="form-control" ng-model="data.selectedLinkColumn">
+            <option ng-repeat="column in data.availableLinkColumns" value="{{ column }}">
+              {{ column.name }}
             </option>
           </select>
 

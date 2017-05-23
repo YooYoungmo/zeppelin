@@ -9,9 +9,9 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
 
   function init(paragraphId) {
     $scope.data = {
-      linkColumn: null,
+      selectedLinkColumn: null,
       paragraph: null,
-      availableOptions: [],
+      availableLinkColumns: [],
       linkParameterRows: [{
         column : '',
         inputName : ''
@@ -22,10 +22,10 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
 
     if($scope.paragraphId == paragraphId) {
       if(paragraphResultShareService.get(paragraphId)) {
-        $scope.data.availableOptions = [];
+        $scope.data.availableLinkColumns = [];
         var paragraphResults = paragraphResultShareService.get(paragraphId);
         for(var i = 0; i < paragraphResults.length; i++) {
-          $scope.data.availableOptions.push({
+          $scope.data.availableLinkColumns.push({
             idx: paragraphResults[i].index, name: paragraphResults[i].name
           });
         }
@@ -54,7 +54,7 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
       linkParameters.push(linkParameter);
     }
 
-    var selectedLinkColumn = JSON.parse($scope.data.linkColumn);
+    var selectedLinkColumn = JSON.parse($scope.data.selectedLinkColumn);
 
     var addingLink = {
       linkColumn: selectedLinkColumn.name,
@@ -64,7 +64,7 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
 
     $scope.data.addedLinks.push(addingLink);
 
-    $rootScope.$broadcast('linkParameter', {
+    $rootScope.$broadcast('addLinkParameterToParagraphResult', {
       sourceParagraphId: paragraphId,
       targetParagraph: $scope.data.paragraph,
       sourceParagraphLinkColumnIdx: selectedLinkColumn.idx,
