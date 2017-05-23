@@ -5,19 +5,33 @@ angular.module('zeppelinWebApp').controller('LinkParameterCtrl', LinkParameterCt
 function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
   'ngInject'
 
-  $scope.data = {
-    linkColumn: null,
-    paragraph: null,
-    availableOptions: [],
-    linkParameterRows: [{
-      column : '',
-      inputName : ''
-    }],
-    addedLinks: [],
-    source: null
+  $scope.data = null;
+
+  function init(paragraphId) {
+    $scope.data = {
+      linkColumn: null,
+      paragraph: null,
+      availableOptions: [],
+      linkParameterRows: [{
+        column : '',
+        inputName : ''
+      }],
+      addedLinks: [],
+      source: null
+    };
+
+    if($scope.paragraphId == paragraphId) {
+      if(paragraphResultShareService.get(paragraphId)) {
+        $scope.data.availableOptions = [];
+        var paragraphResults = paragraphResultShareService.get(paragraphId);
+        for(var i = 0; i < paragraphResults.length; i++) {
+          $scope.data.availableOptions.push({
+            idx: paragraphResults[i].index, name: paragraphResults[i].name
+          });
+        }
+      }
+    }
   };
-
-
 
   $scope.addRow = function(index){
     var emptyRow = { column : '', inputName : '' };
@@ -40,17 +54,20 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
       linkParameters.push(linkParameter);
     }
 
+    var selectedLinkColumn = JSON.parse($scope.data.linkColumn);
+
     var addingLink = {
-      linkColumn: $scope.data.linkColumn,
+      linkColumn: selectedLinkColumn.name,
       targetParagraph: $scope.data.paragraph,
       linkParameters:linkParameters
-    }
+    };
+
     $scope.data.addedLinks.push(addingLink);
 
     $rootScope.$broadcast('linkParameter', {
       sourceParagraphId: paragraphId,
       targetParagraph: $scope.data.paragraph,
-      sourceParagraphLinkColumnIdx: 0,
+      sourceParagraphLinkColumnIdx: selectedLinkColumn.idx,
       targetParagraphLinkParameters: linkParameters
     });
   };
@@ -60,16 +77,6 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
   };
 
   $scope.$on('openLinkParameterModal', function (event, paragraphId) {
-    if($scope.paragraphId == paragraphId) {
-      if(paragraphResultShareService.get(paragraphId)) {
-        $scope.data.availableOptions = [];
-        var paragraphResults = paragraphResultShareService.get(paragraphId);
-        for(var i = 0; i < paragraphResults.length; i++) {
-          $scope.data.availableOptions.push({
-            idx: paragraphResults[i].index, name: paragraphResults[i].name
-          });
-        }
-      }
-    }
+    init(paragraphId);
   });
 }

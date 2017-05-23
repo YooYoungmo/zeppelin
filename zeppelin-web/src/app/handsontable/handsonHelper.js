@@ -45,9 +45,9 @@ export default class HandsonHelper {
   getHandsonTableConfig (columns, columnNames, resultRows, linkParameter, compile, scope) {
     let self = this
     if(linkParameter) {
-      columns[linkParameter.sourceParagraphLinkColumnIdx].isHtml = true
       for(var i = 0; i < resultRows.length; i++) {
         var resultRow = resultRows[i]
+
         var params = self._makeParams(linkParameter.targetParagraphLinkParameters, columnNames, resultRow)
 
         resultRow[linkParameter.sourceParagraphLinkColumnIdx] =
@@ -75,9 +75,8 @@ export default class HandsonHelper {
       cells: function (ro, co, pro) {
         let cellProperties = {}
         let colType = columns[co].type
-        let htmlFlag = columns[co].isHtml
         cellProperties.renderer = function (instance, td, row, col, prop, value, cellProperties) {
-          self._cellRenderer(instance, td, row, col, prop, value, cellProperties, colType, htmlFlag, compile, scope)
+          self._cellRenderer(instance, td, row, col, prop, value, cellProperties, colType, compile, scope)
         }
         return cellProperties
       },
@@ -184,7 +183,7 @@ export default class HandsonHelper {
     return false
   }
 
-  _cellRenderer (instance, td, row, col, prop, value, cellProperties, colType, htmlFlag, compile, scope) {
+  _cellRenderer (instance, td, row, col, prop, value, cellProperties, colType, compile, scope) {
     if (colType === 'numeric' && this._isNumeric(value)) {
       cellProperties.format = '0,0.[00000]'
       td.style.textAlign = 'left'
@@ -192,7 +191,7 @@ export default class HandsonHelper {
       Handsontable.renderers.NumericRenderer.apply(this, arguments)
     } else if (value.length > '%html'.length && value.substring(0, '%html '.length) === '%html ') {
       td.innerHTML = value.substring('%html'.length)
-    } else if (htmlFlag == true) {
+    } else if (value.indexOf('<a link-params') != -1) {
       td.innerHTML = value;
       compile(td)(scope)
     } else {
