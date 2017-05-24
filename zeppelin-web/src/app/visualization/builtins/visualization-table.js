@@ -54,7 +54,7 @@ export default class TableVisualization extends Visualization {
     let handsonHelper = new HandsonHelper()
 
     this.hot = new Handsontable(container, handsonHelper.getHandsonTableConfig(
-      columns, columnNames, resultRows, this._compile, this._scope))
+      columns, columnNames, resultRows, this._compile, this._currentScope))
     this.hot.validateCells(null)
   }
 

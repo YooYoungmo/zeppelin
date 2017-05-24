@@ -537,7 +537,7 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
           }
           builtInViz.instance._emitter = emitter
           builtInViz.instance._compile = $compile
-          builtInViz.instance._scope = $scope
+          builtInViz.instance._currentScope = $scope
           builtInViz.instance._createNewScope = createNewScope
           const transformation = builtInViz.instance.getTransformation()
           transformation._emitter = emitter
