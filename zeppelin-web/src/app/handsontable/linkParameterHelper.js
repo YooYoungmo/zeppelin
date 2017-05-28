@@ -53,7 +53,7 @@ export default class LinkParameterHelper {
       for(var i = 0; i < this.resultRows.length; i++) {
         var resultRow = this.resultRows[i]
         var rawResultData = this._getRawResultData(addLinkParameter.sourceParagraphLinkColumnIdx, resultRow)
-        var params = this._makeParams(addLinkParameter.targetParagraphLinkParameters, resultRow)
+        var params = this._makeParams(addLinkParameter.targetParagraphLinkParams, resultRow)
 
         resultRow[addLinkParameter.sourceParagraphLinkColumnIdx] =
           '<a link-params data-raw="' + rawResultData + '" data-paragraph-id="' + addLinkParameter.targetParagraph

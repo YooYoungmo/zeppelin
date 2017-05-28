@@ -2,7 +2,7 @@ angular.module('zeppelinWebApp').controller('LinkParameterCtrl', LinkParameterCt
 
 
 
-function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
+function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService, websocketMsgSrv) {
   'ngInject'
 
   $scope.data = null;
@@ -65,13 +65,7 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService) {
     };
 
     $scope.data.addedLinks.push(addingLink);
-
-    $rootScope.$broadcast('addLinkParameterToParagraphResult', {
-      sourceParagraphId: paragraphId,
-      targetParagraph: $scope.data.paragraph,
-      sourceParagraphLinkColumnIdx: selectedLinkColumn.idx,
-      targetParagraphLinkParameters: linkParameters
-    });
+    websocketMsgSrv.saveLinkParameter(paragraphId, selectedLinkColumn.idx, $scope.data.paragraph, linkParameters);
   };
 
   $scope.deleteLink = function(index) {

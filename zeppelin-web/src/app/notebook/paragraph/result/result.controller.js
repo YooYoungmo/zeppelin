@@ -217,13 +217,19 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
   })
 
   $scope.$on('addLinkParameterToParagraphResult', function (event, data) {
+    window.console.log('addLinkParameterToParagraphResult : ' + paragraph.id)
+    window.console.log(data)
+
     if (paragraph.id === data.sourceParagraphId) {
+      window.console.log(data)
       tableData.addLinkParameter = data;
       renderResult($scope.type, true);
     }
   })
 
   const updateData = function (result, config, paragraphRef, index) {
+    window.console.log('updateData')
+    window.console.log(result)
     data = result.data
     paragraph = paragraphRef
     resultIndex = parseInt(index)
@@ -262,6 +268,10 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
       $scope.tableDataComment = tableData.comment
 
       paragraphResultShareService.put($scope.paragraph.id, tableData.columns)
+
+      if(result.linkParameter) {
+        tableData.addLinkParameter = result.linkParameter
+      }
 
     } else if ($scope.type === 'IMG') {
       $scope.imageData = data
