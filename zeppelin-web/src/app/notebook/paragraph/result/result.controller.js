@@ -222,7 +222,7 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
 
     if (paragraph.id === data.sourceParagraphId) {
       window.console.log(data)
-      tableData.addLinkParameter = data;
+      tableData.linkedParameters.push(data);
       renderResult($scope.type, true);
     }
   })
@@ -269,8 +269,10 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
 
       paragraphResultShareService.put($scope.paragraph.id, tableData.columns)
 
-      if(result.linkParameter) {
-        tableData.addLinkParameter = result.linkParameter
+      if(result.linkedParameters) {
+        tableData.linkedParameters = result.linkedParameters
+      } else {
+        tableData.linkedParameters = []
       }
 
     } else if ($scope.type === 'IMG') {

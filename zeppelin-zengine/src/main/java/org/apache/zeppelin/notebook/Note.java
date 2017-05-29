@@ -17,15 +17,8 @@
 
 package org.apache.zeppelin.notebook;
 
-import static java.lang.String.format;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.*;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
+import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.zeppelin.conf.ZeppelinConfiguration;
@@ -46,8 +39,14 @@ import org.apache.zeppelin.user.Credentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.String.format;
 
 /**
  * Binded interpreters for a note
@@ -903,5 +902,10 @@ public class Note implements Serializable, ParagraphJobListener {
     for (Paragraph p : note.paragraphs) {
       p.settings.convertOldInput();
     }
+  }
+
+  public Note getNoteFromPersistence(AuthenticationInfo authenticationInfo) throws IOException {
+    return repo.get(id, authenticationInfo);
+
   }
 }

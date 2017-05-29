@@ -17,6 +17,8 @@
 package org.apache.zeppelin.interpreter;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Interpreter result message
@@ -24,10 +26,17 @@ import java.io.Serializable;
 public class InterpreterResultMessage implements Serializable {
   InterpreterResult.Type type;
   String data;
+  List<LinkParameter> linkedParameters = new LinkedList<>();
 
   public InterpreterResultMessage(InterpreterResult.Type type, String data) {
     this.type = type;
     this.data = data;
+  }
+
+  public InterpreterResultMessage(InterpreterResult.Type type, String data, List<LinkParameter> linkedParameters) {
+    this.type = type;
+    this.data = data;
+    this.linkedParameters = linkedParameters;
   }
 
   public InterpreterResult.Type getType() {
@@ -40,5 +49,28 @@ public class InterpreterResultMessage implements Serializable {
 
   public String toString() {
     return "%" + type.name().toLowerCase() + " " + data;
+  }
+
+  public List<LinkParameter> getLinkedParameters() {
+    return linkedParameters;
+  }
+
+  public void addLinkParameter(LinkParameter lp) {
+    boolean replaceFlag = false;
+
+    for(int i = 0; i < this.linkedParameters.size(); i++) {
+      LinkParameter linkParameter = this.linkedParameters.get(i);
+
+      if(linkParameter.getSourceParagraphId().equals(lp.getSourceParagraphId()) &&
+              linkParameter.getSourceParagraphLinkColumnIdx() == lp.getSourceParagraphLinkColumnIdx()) {
+        this.linkedParameters.set(i, lp);
+        replaceFlag = true;
+        break;
+      }
+    }
+
+    if(replaceFlag == false) {
+      this.linkedParameters.add(lp);
+    }
   }
 }

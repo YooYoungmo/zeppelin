@@ -46,9 +46,9 @@ export default class TableVisualization extends Visualization {
       this.hot.destroy()
     }
 
-    if(tableData.addLinkParameter) {
+    if(tableData.linkedParameters && tableData.linkedParameters.length > 0) {
       let linkParameterHelper = new LinkParameterHelper(columnNames, resultRows)
-      resultRows = linkParameterHelper.generateLinkParameter(tableData.addLinkParameter)
+      resultRows = linkParameterHelper.generateLinkParameters(tableData.linkedParameters)
     }
 
     let handsonHelper = new HandsonHelper()

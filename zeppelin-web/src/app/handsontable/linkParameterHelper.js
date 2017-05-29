@@ -48,18 +48,20 @@ export default class LinkParameterHelper {
     return JSON.stringify(params)
   }
 
-  generateLinkParameter(addLinkParameter) {
-    if(addLinkParameter) {
-      for(var i = 0; i < this.resultRows.length; i++) {
-        var resultRow = this.resultRows[i]
-        var rawResultData = this._getRawResultData(addLinkParameter.sourceParagraphLinkColumnIdx, resultRow)
-        var params = this._makeParams(addLinkParameter.targetParagraphLinkParams, resultRow)
+  generateLinkParameters(linkedParameters) {
+    for(var i = 0; i < linkedParameters.length; i++) {
+      var linkedParameter = linkedParameters[i]
 
-        resultRow[addLinkParameter.sourceParagraphLinkColumnIdx] =
-          '<a link-params data-raw="' + rawResultData + '" data-paragraph-id="' + addLinkParameter.targetParagraph
-            + '" data-params=' + "'" + params + "'" + '>' + rawResultData + '</a>'
+      for(var j = 0; j < this.resultRows.length; j++) {
+        var resultRow = this.resultRows[j]
+        var rawResultData = this._getRawResultData(linkedParameter.sourceParagraphLinkColumnIdx, resultRow)
+        var params = this._makeParams(linkedParameter.targetParagraphLinkParams, resultRow)
 
-        this.resultRows[i] = resultRow
+        resultRow[linkedParameter.sourceParagraphLinkColumnIdx] =
+          '<a link-params data-raw="' + rawResultData + '" data-paragraph-id="' + linkedParameter.targetParagraph
+          + '" data-params=' + "'" + params + "'" + '>' + rawResultData + '</a>'
+
+        this.resultRows[j] = resultRow
       }
     }
 
