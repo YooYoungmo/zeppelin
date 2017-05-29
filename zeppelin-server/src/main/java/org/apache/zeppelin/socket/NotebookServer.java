@@ -364,8 +364,9 @@ public class NotebookServer extends WebSocketServlet
     }
   }
 
-  private void linkParameter(NotebookSocket conn, HashSet<String> userAndRoles, Notebook notebook, Message messagereceived)
-          throws IOException {
+  private void linkParameter(NotebookSocket conn, HashSet<String> userAndRoles,
+                             Notebook notebook, Message messagereceived)
+      throws IOException {
 
     final String paragraphId = (String) messagereceived.get("sourceParagraphId");
     if (paragraphId == null) {
@@ -379,6 +380,12 @@ public class NotebookServer extends WebSocketServlet
       return;
     }
 
+    persistLinkParameterAndBroadcast(notebook, messagereceived, paragraphId, noteId);
+  }
+
+  private void persistLinkParameterAndBroadcast(Notebook notebook, Message messagereceived,
+                                                String paragraphId, String noteId)
+      throws IOException {
     Note note = notebook.getNote(noteId);
     Paragraph paragraph = note.getParagraph(paragraphId);
 
@@ -386,16 +393,15 @@ public class NotebookServer extends WebSocketServlet
     InterpreterResult result = gson.fromJson(resultJson, InterpreterResult.class);
     List<InterpreterResultMessage> messages = result.message();
 
-
     LinkedParameter linkedParameter = new LinkedParameter(
-            (String)messagereceived.get("sourceParagraphId"),
-            ((Double)messagereceived.get("sourceParagraphLinkColumnIdx")).intValue(),
-            (String)messagereceived.get("targetParagraphId"),
-            (List)messagereceived.get("targetParagraphLinkParams"));
+            (String) messagereceived.get("sourceParagraphId"),
+            ((Double) messagereceived.get("sourceParagraphLinkColumnIdx")).intValue(),
+            (String) messagereceived.get("targetParagraphId"),
+            (List) messagereceived.get("targetParagraphLinkParams"));
 
-    for(int i = 0; i < messages.size(); i++) {
+    for (int i = 0; i < messages.size(); i++) {
       InterpreterResultMessage message = messages.get(i);
-      if(message.getType() == InterpreterResult.Type.TABLE) {
+      if (message.getType() == InterpreterResult.Type.TABLE) {
         message.addLinkParameter(linkedParameter);
         messages.set(i, message);
         break;
@@ -405,7 +411,8 @@ public class NotebookServer extends WebSocketServlet
     paragraph.setResult(result);
     note.persist(new AuthenticationInfo(messagereceived.principal));
 
-    broadcast(note.getId(), new Message(OP.RENDER_LINKED_PARAMETER).put("linkedParameter", linkedParameter));
+    broadcast(note.getId(),
+            new Message(OP.RENDER_LINKED_PARAMETER).put("linkedParameter", linkedParameter));
   }
 
   @Override

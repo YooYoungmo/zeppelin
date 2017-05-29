@@ -33,7 +33,8 @@ public class InterpreterResultMessage implements Serializable {
     this.data = data;
   }
 
-  public InterpreterResultMessage(InterpreterResult.Type type, String data, List<LinkedParameter> linkedParameters) {
+  public InterpreterResultMessage(InterpreterResult.Type type, String data,
+                                  List<LinkedParameter> linkedParameters) {
     this.type = type;
     this.data = data;
     this.linkedParameters = linkedParameters;
@@ -58,18 +59,18 @@ public class InterpreterResultMessage implements Serializable {
   public void addLinkParameter(LinkedParameter lp) {
     boolean replaceFlag = false;
 
-    for(int i = 0; i < this.linkedParameters.size(); i++) {
-      LinkedParameter linkedParameter = this.linkedParameters.get(i);
+    for (int i = 0; i < this.linkedParameters.size(); i++) {
+      LinkedParameter params = this.linkedParameters.get(i);
 
-      if(linkedParameter.getSourceParagraphId().equals(lp.getSourceParagraphId()) &&
-              linkedParameter.getSourceParagraphLinkColumnIdx() == lp.getSourceParagraphLinkColumnIdx()) {
+      if (params.getSourceParagraphId().equals(lp.getSourceParagraphId()) &&
+              params.getSourceParagraphLinkColumnIdx() == lp.getSourceParagraphLinkColumnIdx()) {
         this.linkedParameters.set(i, lp);
         replaceFlag = true;
         break;
       }
     }
 
-    if(replaceFlag == false) {
+    if (replaceFlag == false) {
       this.linkedParameters.add(lp);
     }
   }
