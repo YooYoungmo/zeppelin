@@ -216,8 +216,6 @@ public class VFSNotebookRepo implements NotebookRepo {
     Gson gson = gsonBuilder.create();
     String json = gson.toJson(note);
 
-    LOG.info("saving json : " + json);
-
     FileObject rootDir = getRootDir();
 
     FileObject noteDir = rootDir.resolveFile(note.getId(), NameScope.CHILD);

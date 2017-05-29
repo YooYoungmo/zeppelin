@@ -177,8 +177,8 @@ public class Message {
     PARAGRAPH_EXECUTED_BY_SPELL,  // [c-s] paragraph was executed by spell
     RUN_PARAGRAPH_USING_SPELL,     // [s-c] run paragraph using spell
     PARAS_INFO,                    // [s-c] paragraph runtime infos
-    SAVE_LINK_PARAMETER,
-    ADDED_LINK_PARAMETER
+    LINK_PARAMETER,
+    RENDER_LINKED_PARAMETER
 
   }
 

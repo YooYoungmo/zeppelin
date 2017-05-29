@@ -6,13 +6,13 @@ import java.util.List;
 /**
  * Created by yooyoung-mo on 2017. 5. 26..
  */
-public class LinkParameter implements Serializable {
+public class LinkedParameter implements Serializable {
     private String sourceParagraphId;
     private String targetParagraph;
     private int sourceParagraphLinkColumnIdx;
     private List<Object> targetParagraphLinkParams;
 
-    public LinkParameter(String sourceParagraphId, int sourceParagraphLinkColumnIdx, String targetParagraph, List<Object> targetParagraphLinkParams) {
+    public LinkedParameter(String sourceParagraphId, int sourceParagraphLinkColumnIdx, String targetParagraph, List<Object> targetParagraphLinkParams) {
         this.sourceParagraphId = sourceParagraphId;
         this.targetParagraph = targetParagraph;
         this.sourceParagraphLinkColumnIdx = sourceParagraphLinkColumnIdx;

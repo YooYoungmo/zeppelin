@@ -336,16 +336,9 @@ function websocketMsgSrv ($rootScope, websocketEvents) {
       websocketEvents.sendNewEvent({op: 'GET_INTERPRETER_SETTINGS'})
     },
 
-    saveLinkParameter: function (sourceParagraphId, sourceParagraphLinkColumnIdx, targetParagraphId, targetParagraphLinkParams) {
-      window.console.log('saveLinkParameter event...')
-
-      window.console.log(sourceParagraphId)
-      window.console.log(sourceParagraphLinkColumnIdx)
-      window.console.log(targetParagraphId)
-      window.console.log(targetParagraphLinkParams)
-
+    linkParameter: function (sourceParagraphId, sourceParagraphLinkColumnIdx, targetParagraphId, targetParagraphLinkParams) {
       websocketEvents.sendNewEvent({
-        op: 'SAVE_LINK_PARAMETER',
+        op: 'LINK_PARAMETER',
         data: {
           sourceParagraphId: sourceParagraphId,
           sourceParagraphLinkColumnIdx: sourceParagraphLinkColumnIdx,

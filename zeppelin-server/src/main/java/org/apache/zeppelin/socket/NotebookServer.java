@@ -353,8 +353,8 @@ public class NotebookServer extends WebSocketServlet
           case WATCHER:
             switchConnectionToWatcher(conn, messagereceived);
             break;
-          case SAVE_LINK_PARAMETER:
-            saveLinkParameter(conn, userAndRoles, notebook, messagereceived);
+          case LINK_PARAMETER:
+            linkParameter(conn, userAndRoles, notebook, messagereceived);
             break;
           default:
             break;
@@ -364,7 +364,7 @@ public class NotebookServer extends WebSocketServlet
     }
   }
 
-  private void saveLinkParameter(NotebookSocket conn, HashSet<String> userAndRoles, Notebook notebook, Message messagereceived)
+  private void linkParameter(NotebookSocket conn, HashSet<String> userAndRoles, Notebook notebook, Message messagereceived)
           throws IOException {
 
     final String paragraphId = (String) messagereceived.get("sourceParagraphId");
@@ -387,7 +387,7 @@ public class NotebookServer extends WebSocketServlet
     List<InterpreterResultMessage> messages = result.message();
 
 
-    LinkParameter linkParameter = new LinkParameter(
+    LinkedParameter linkedParameter = new LinkedParameter(
             (String)messagereceived.get("sourceParagraphId"),
             ((Double)messagereceived.get("sourceParagraphLinkColumnIdx")).intValue(),
             (String)messagereceived.get("targetParagraphId"),
@@ -396,7 +396,7 @@ public class NotebookServer extends WebSocketServlet
     for(int i = 0; i < messages.size(); i++) {
       InterpreterResultMessage message = messages.get(i);
       if(message.getType() == InterpreterResult.Type.TABLE) {
-        message.addLinkParameter(linkParameter);
+        message.addLinkParameter(linkedParameter);
         messages.set(i, message);
         break;
       }
@@ -405,7 +405,7 @@ public class NotebookServer extends WebSocketServlet
     paragraph.setResult(result);
     note.persist(new AuthenticationInfo(messagereceived.principal));
 
-    broadcast(note.getId(), new Message(OP.ADDED_LINK_PARAMETER).put("linkParameter", linkParameter));
+    broadcast(note.getId(), new Message(OP.RENDER_LINKED_PARAMETER).put("linkedParameter", linkedParameter));
   }
 
   @Override

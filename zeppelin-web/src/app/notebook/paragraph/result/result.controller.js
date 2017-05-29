@@ -216,20 +216,14 @@ function ResultCtrl ($scope, $rootScope, $route, $window, $routeParams, $locatio
     }
   })
 
-  $scope.$on('addLinkParameterToParagraphResult', function (event, data) {
-    window.console.log('addLinkParameterToParagraphResult : ' + paragraph.id)
-    window.console.log(data)
-
+  $scope.$on('renderLinkParameterToParagraphResult', function (event, data) {
     if (paragraph.id === data.sourceParagraphId) {
-      window.console.log(data)
       tableData.linkedParameters.push(data);
       renderResult($scope.type, true);
     }
   })
 
   const updateData = function (result, config, paragraphRef, index) {
-    window.console.log('updateData')
-    window.console.log(result)
     data = result.data
     paragraph = paragraphRef
     resultIndex = parseInt(index)

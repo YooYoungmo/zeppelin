@@ -26,14 +26,14 @@ import java.util.List;
 public class InterpreterResultMessage implements Serializable {
   InterpreterResult.Type type;
   String data;
-  List<LinkParameter> linkedParameters = new LinkedList<>();
+  List<LinkedParameter> linkedParameters = new LinkedList<>();
 
   public InterpreterResultMessage(InterpreterResult.Type type, String data) {
     this.type = type;
     this.data = data;
   }
 
-  public InterpreterResultMessage(InterpreterResult.Type type, String data, List<LinkParameter> linkedParameters) {
+  public InterpreterResultMessage(InterpreterResult.Type type, String data, List<LinkedParameter> linkedParameters) {
     this.type = type;
     this.data = data;
     this.linkedParameters = linkedParameters;
@@ -51,18 +51,18 @@ public class InterpreterResultMessage implements Serializable {
     return "%" + type.name().toLowerCase() + " " + data;
   }
 
-  public List<LinkParameter> getLinkedParameters() {
+  public List<LinkedParameter> getLinkedParameters() {
     return linkedParameters;
   }
 
-  public void addLinkParameter(LinkParameter lp) {
+  public void addLinkParameter(LinkedParameter lp) {
     boolean replaceFlag = false;
 
     for(int i = 0; i < this.linkedParameters.size(); i++) {
-      LinkParameter linkParameter = this.linkedParameters.get(i);
+      LinkedParameter linkedParameter = this.linkedParameters.get(i);
 
-      if(linkParameter.getSourceParagraphId().equals(lp.getSourceParagraphId()) &&
-              linkParameter.getSourceParagraphLinkColumnIdx() == lp.getSourceParagraphLinkColumnIdx()) {
+      if(linkedParameter.getSourceParagraphId().equals(lp.getSourceParagraphId()) &&
+              linkedParameter.getSourceParagraphLinkColumnIdx() == lp.getSourceParagraphLinkColumnIdx()) {
         this.linkedParameters.set(i, lp);
         replaceFlag = true;
         break;

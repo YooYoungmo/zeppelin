@@ -32,9 +32,6 @@ function websocketEvents ($rootScope, $websocket, $location, baseUrlSrv) {
   })
 
   websocketCalls.sendNewEvent = function (data) {
-    window.console.log('websocketCalls.sendNewEvent')
-    window.console.log(data)
-
     if ($rootScope.ticket !== undefined) {
       data.principal = $rootScope.ticket.principal
       data.ticket = $rootScope.ticket.ticket
@@ -53,9 +50,6 @@ function websocketEvents ($rootScope, $websocket, $location, baseUrlSrv) {
   }
 
   websocketCalls.ws.onMessage(function (event) {
-    window.console.log('websocketCalls.ws.onMessage')
-    window.console.log(event)
-
     let payload
     if (event.data) {
       payload = angular.fromJson(event.data)
@@ -178,15 +172,12 @@ function websocketEvents ($rootScope, $websocket, $location, baseUrlSrv) {
       $rootScope.$broadcast('setNoteRevisionResult', data)
     } else if (op === 'PARAS_INFO') {
       $rootScope.$broadcast('updateParaInfos', data)
-    } else if (op === 'ADDED_LINK_PARAMETER') {
-      window.console.log('ADDED_LINK_PARAMETER')
-      window.console.log(data)
-
-      $rootScope.$broadcast('addLinkParameterToParagraphResult', {
-        sourceParagraphId: data.linkParameter.sourceParagraphId,
-        sourceParagraphLinkColumnIdx: data.linkParameter.sourceParagraphLinkColumnIdx,
-        targetParagraph: data.linkParameter.targetParagraph,
-        targetParagraphLinkParams: data.linkParameter.targetParagraphLinkParams
+    } else if (op === 'RENDER_LINKED_PARAMETER') {
+      $rootScope.$broadcast('renderLinkParameterToParagraphResult', {
+        sourceParagraphId: data.linkedParameter.sourceParagraphId,
+        sourceParagraphLinkColumnIdx: data.linkedParameter.sourceParagraphLinkColumnIdx,
+        targetParagraph: data.linkedParameter.targetParagraph,
+        targetParagraphLinkParams: data.linkedParameter.targetParagraphLinkParams
       })
 
     } else {

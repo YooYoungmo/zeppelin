@@ -65,7 +65,7 @@ function LinkParameterCtrl ($scope, $rootScope, paragraphResultShareService, web
     };
 
     $scope.data.addedLinks.push(addingLink);
-    websocketMsgSrv.saveLinkParameter(paragraphId, selectedLinkColumn.idx, $scope.data.paragraph, linkParameters);
+    websocketMsgSrv.linkParameter(paragraphId, selectedLinkColumn.idx, $scope.data.paragraph, linkParameters);
   };
 
   $scope.deleteLink = function(index) {
